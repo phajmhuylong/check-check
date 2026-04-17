@@ -3,6 +3,10 @@ import path from "path";
 import app from "./app.js";
 import connectDB from "./config/database.js";
 
+// Nạp biến môi trường theo thứ tự ưu tiên:
+// - `.env` ở root (phổ biến khi deploy / chạy local)
+// - `backend/.env` (tiện nếu bạn muốn tách riêng backend)
+// `override: false` nghĩa là file nạp sau KHÔNG ghi đè biến đã có.
 const envPaths = [
   path.resolve(process.cwd(), ".env"),
   path.resolve(process.cwd(), "backend/.env"),
@@ -15,7 +19,8 @@ const PORT = Number(process.env.PORT) || 3000; // Dung PORT trong env, neu chua 
 async function startServer() {
   try {
     try {
-      await connectDB(); // Thu ket noi DB som de biet cau hinh co dung hay khong.
+      // Kết nối DB sớm để phát hiện sai URI ngay khi start.
+      await connectDB();
       console.log("Database connected successfully.");
     } catch (error) {
       // Dev van nen mo server de ban test route/local code du DB tam thoi chua truy cap duoc.

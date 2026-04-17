@@ -74,7 +74,7 @@ web_modules/
 .env.test
 .env.production
 .env.*
-!.env.example
+.env.example
 
 # Cursor/Claude local files
 .claude/
