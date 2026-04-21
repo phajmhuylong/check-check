@@ -1,1 +1,1 @@
-export const DB_HOST = 'ppwmyhrnrfieedtqduyn';
+export const DB_HOST = 'ProjectDatabase';
