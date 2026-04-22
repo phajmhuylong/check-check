@@ -99,10 +99,12 @@ const login = async ( req , res ) => {
 
 const logout = async ( req , res ) => {
     try {
+      // Ghi chú quan trọng:
+      // Hiện dự án CHƯA có cơ chế session/JWT token, nên "logout" ở đây chỉ mang tính placeholder.
+      // Để logout đúng theo "tài khoản đang đăng nhập", cần triển khai access/refresh token (hoặc session cookie)
+      // và revoke/clear token của đúng phiên hiện tại.
       const { email } = req.body ; 
-      const user = await User.findOne({
-        
-      });
+      const user = await User.findOne({ email: email?.toLowerCase() });
 
       if( !user ) return res.status(404).json({
         message : " User not found !"

@@ -6,10 +6,28 @@ const app = express(); // khởi tạo ứng dụng Express
 app.use(express.json()); //cho phép server đọc dữ liệu JSON từ body của request
  
     
-import userRouter from "./routes/user.route.js"; // import router của User (chứa các endpoint liên quan đến tài khoản)
+// routes import
+import userRouter from './routes/user.route.js'; 
+import postRouter from './routes/post.route.js';
 
-app.use("/api/v1/users", userRouter); // gắn tất cả route của User vào đường dẫn /api/v1/users || vd : http:localhost:3000/api/v1/users/register
-// Ghi chú: trước đó file này có mount `/api/v1/posts` nhưng lại import nhầm `user.route.js`,
-// dễ làm bạn test nhầm endpoint. Khi có post router thật thì import đúng file rồi mount lại.
+
+// routes declaration
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/posts", postRouter)
+
+// example route: http://localhost:4000/api/v1/users/register
+
+// 404 handler (đặt CUỐI CÙNG sau toàn bộ `app.use("/api/...")`):
+// - Mục tiêu: khi gọi sai URL/method thì trả JSON thống nhất để Postman/frontend dễ đọc,
+//   thay vì trang HTML mặc định kiểu "Cannot POST /...".
+// - Lưu ý production: nếu muốn hạn chế lộ thông tin, có thể bỏ `method/path/hint`.
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Route not found",
+    method: req.method,
+    path: req.originalUrl,
+    hint: "Try POST /api/v1/posts/create (or /api/v1/routes/create alias)",
+  });
+});
 
 export default app; // xuất app để index.js có thể dùng để mở server
